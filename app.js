@@ -22,7 +22,6 @@ if (process.env.DB_ENV === "development") {
 
 //Handling Unhandle Routes
 
+// Global Error Handling Middleware
 
-// Global Error Handling Middleware 
-
-module.app;
+module.exports = app;
