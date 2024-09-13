@@ -8,14 +8,13 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/appProduct" element={<AddProduct />} />
+        <Route path="/products/addProduct" element={<AddProduct />} />
         <Route path="/products" element={<ShowProduct />} />
         <Route path="/products/edit/:id" element={<UpdateProduct />} />
-        <Route path="/products/:id" element={<DetailProduct />} />
+        <Route path="/products/products/:id" element={<DetailProduct />} />
       </Routes>
     </Router>
   );
 };
 
 export default App;
-

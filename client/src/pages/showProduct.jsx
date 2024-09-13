@@ -1,66 +1,69 @@
-// import { useState, useEffect } from "react";
-// import axios from "axios";
-// const showProduct = () => {
+import { useFetchProductQuery } from "../store/api/productApi";
+import {
+  CardContent,
+  CardMedia,
+  Button,
+  CardActionArea,
+  CardActions,
+  Typography,
+  Container,
+  Grid,
+} from "@mui/material";
+import { Link } from "react-router-dom";
 
-//     useEffect(async () => {
-//         try {
-//                 const data = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/products/products`) // Update URL if necessary
-//                 console.log(data);
-//             } catch (error) {
-//                 console.log(error.message);
-//             }
-//     }, []);
-
-//   return <div>All Product</div>;
-// };
-
-// export default showProduct;
-
-import { useState, useEffect } from "react";
-import axios from "axios";
+import MalenIconSvg from "../assets/images/Malen.webp";
 
 const ShowProduct = () => {
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+  const { data, isLoading, isError } = useFetchProductQuery();
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/products/products`);
-                console.log(response.data); // Log the entire response to inspect its structure
-                // Extract the array of products from response.data.data
-                setProducts(Array.isArray(response.data.data) ? response.data.data : []);
-                setLoading(false);
-            } catch (err) {
-                setError(err.message);
-                setLoading(false);
-            }
-        };
+  // Safely access data once it's available
+  const products = data?.data || [];
+  console.log(products);
+  const renderProduct = products.map((item) => (
+    <Grid item sx={{ background: "white", width: "350px" }}>
+      <CardActionArea>
+        <CardMedia
+          component="img"
+          height="140"
+          image={MalenIconSvg}
+          alt="green iguana"
+          sx={{ width: "100%" }}
+        />
+        <CardContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography gutterBottom variant="h5" component="div">
+            {item.title}
+          </Typography>
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            {item.description}
+          </Typography>
+          <Typography variant="body2" sx={{ color: "red", fontSize: "16px" }}>
+            {item.price}$
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+        <Link to={`/products/${item.id}`}>
+          <Button size="small" color="primary">
+            View
+          </Button>
+        </Link>
+      </CardActions>
+    </Grid>
+  ));
 
-        fetchProducts();
-    }, []);
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
-
-    return (
-        <div>
-            <h1>All Products</h1>
-            <ul>
-                {products.length > 0 ? (
-                    products.map(product => (
-                        <li key={product.id}>{product.title}</li> // Extract and display the title
-                    ))
-                ) : (
-                    <div>No products available.</div>
-                )}
-            </ul>
-        </div>
-    );
+  return (
+    <Container>
+      <Grid container spacing={2} mt={20} gap={2}>
+        {renderProduct}
+      </Grid>
+    </Container>
+  );
 };
 
 export default ShowProduct;
-
-
-
